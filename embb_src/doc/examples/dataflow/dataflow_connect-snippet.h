@@ -1,0 +1,1 @@
+  read >> replace >> write;

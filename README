@@ -1,0 +1,57 @@
+// Authored by Luca Pegolotti, 4/8/2016
+
+Video processing application
+----------------------------
+
+This folder contains the source code for a simple video processing application
+that could be adapted as tutorial for EMB².
+
+Requirements:
+- Microsoft Visual Studio: at the current stage Linux is not supported,
+  as the included version of ffmpeg is built for Windows. However, ffmpeg is
+  available also for Linux so it is possible to extend the framework also for this
+  system.
+
+The source code is located in the video_app folder.
+In order to build the project, EMB² must be built first.
+The provided source code for EMB² corresponds to the commit
+784baa28765c147452e17167c198e04dbb78dcda.
+
+HOW TO BUILD EMB²
+From root, execute the following commands:
+
+mkdir embb
+cd embb_src
+mkdir build
+cd build
+cmake .. -G <generator> -DINSTALL_PREFIX=/path/to/embb/folder
+cmake --build . --config Release
+cmake --build . --config Release --target install
+
+/path/to/embb/folder refers to the path to the folder created in the first step.
+The following generators should work: "Visual Studio 12", "Visual Studio 14".
+
+HOW TO BUILD THE PROJECT
+From root:
+
+mkdir build
+cd build
+cmake .. -G <generator>
+cmake --build . --config Release
+
+If the building completed without errors, the application can be run.
+Before doing that it is necessary to copy the dlls contained in root/dlls into
+the build/Release folder, because the application is not statically linked to
+them.
+
+HOW TO EXECUTE THE APPLICATION
+From root:
+
+cd build/Release
+video_app ../../test_video/gopro.mpg ../../output.mpg 1
+
+The first argument is the input video file, the second is the name of the output
+file. The third argument determines if we want to use the version of EMB² or not:
+when it is 0, parallel processing is disabled.
+
+A description of the application can be found in doc/description.pdf.
