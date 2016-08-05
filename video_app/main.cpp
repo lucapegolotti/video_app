@@ -17,18 +17,17 @@ typedef embb::dataflow::Network Network;
 static InputVideoHandler* inputHandler = nullptr;
 static OutputVideoBuilder* outputBuilder = nullptr;
 static FrameFormatConverter converter;
-static int c = 0;
 
 #define TERMINATE() std::cout << e.what() << std::endl; exit(1)
 
 void filter(AVFrame* frame) {
+  // apply filters to the frame. Here are some examples:
   // filters::applyBlackAndWhite(frame);
   // filters::applyVariableMeanFilter(frame);
   // filters::changeSaturation(frame, 0.2);
   // filters::applyShuffleColors(frame);
   // filters::applyNegative(frame);
   filters::applyMeanFilter(frame, 3);
-  // filters::applyCartoonify(frame,90,40);
   filters::applyCartoonify(frame, 90, 40);
 }
 
@@ -42,11 +41,11 @@ bool readFromFile(AVFrame* &frame) {
   // if frame is not ready just send a nullptr frame
   if (!success)
     frame = nullptr;
-  return ret && c++ < 12000;
+  return ret;
 }
 
 void writeToFile(AVFrame* const &frame) {
-  if (frame != nullptr) {    
+  if (frame != nullptr) {
     try {
       outputBuilder->writeFrame(frame);
     } catch (std::exception& e) {
@@ -65,7 +64,7 @@ void applyFilter(AVFrame* const &input_frame, AVFrame* &output_frame) {
   }
   output_frame = input_frame;
   filter(output_frame);
-  
+
 }
 
 void convertToRGB(AVFrame* const &input_frame, AVFrame* &output_frame) {
@@ -113,9 +112,6 @@ int main(int argc, char *argv[]) {
   if (argc == 4) {
     parallel = atoi(argv[3]);
   }
-
-  // uncomment this line to disable parallel processing
-  // parallel = 0;
 
   // initialize ffmpeg libraries
   av_register_all();
@@ -165,12 +161,12 @@ int main(int argc, char *argv[]) {
     convertToRGB.GetOutput<0>() >> applyFilter.GetInput<0>();
     applyFilter.GetOutput<0>() >> convertToOriginal.GetInput<0>();
     convertToOriginal.GetOutput<0>() >> write.GetInput<0>();
-    
+
     nw();
   } else {
     frame = av_frame_alloc();
     convertedFrame = av_frame_alloc();
-    while (inputHandler->readFrame(frame, &gotFrame) && c++ < 12000) {
+    while (inputHandler->readFrame(frame, &gotFrame)) {
 
       if (gotFrame) {
         converter.convertFormat(&frame, &convertedFrame, TO_RGB);

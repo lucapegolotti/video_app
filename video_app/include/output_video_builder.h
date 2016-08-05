@@ -57,7 +57,7 @@ public:
    * dicrease quality while dicreasing file size (high compression).
    *
    * @param maxqb new value of maximum quantization parameter
-   */ 
+   */
   void setMaxQB(int maxqb);
 
 private:
@@ -71,5 +71,3 @@ private:
 };
 
 #endif  // _OUTPUT_VIDEO_BUILDER_H_
-
-
