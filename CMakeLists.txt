@@ -17,7 +17,6 @@ ${CMAKE_SOURCE_DIR}/embb/lib/embb_mtapi_cpp.lib
 ${CMAKE_SOURCE_DIR}/embb/lib/embb_mtapi_c.lib
 ${CMAKE_SOURCE_DIR}/embb/lib/embb_base_cpp.lib
 ${CMAKE_SOURCE_DIR}/embb/lib/embb_base_c.lib
-${CMAKE_SOURCE_DIR}/embb/lib/embb_tasks_cpp.lib
 )
 
 set(LINK_FFMPEG
